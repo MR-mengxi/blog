@@ -34,9 +34,9 @@ exports.getBlogs = async function (page = 1, limit = 10, categoryid = -1) {
 
 // 获取单篇文章
 exports.getBlogById = async function (id) {
+    await Blog.updateOne({ _id: id }, { $inc: { scanNumber: 1 } })
     const result = await Blog.findById(id, { __v: 0, comment: 0 }).populate("categoryId");
     if (result) {
-        await Blog.updateOne({ _id: id }, { $inc: { scanNumber: 1 } })
         return result;
     }
     return null;
